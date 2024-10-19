@@ -260,3 +260,83 @@ function addQuote() {
     alert("Please enter a quote and category.");
   }
 }
+const API_URL = "https://jsonplaceholder.typicode.com/posts";
+
+async function syncQuotesWithServer() {
+  try {
+    // Fetch existing quotes from the server
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const serverQuotes = await response.json();
+
+    // Update local storage with server quotes
+    localStorage.setItem("quotes", JSON.stringify(serverQuotes));
+
+    console.log("Quotes synced with server!"); // Log message
+    displayQuotes(serverQuotes); // Display quotes on the page
+  } catch (error) {
+    console.error("Error syncing quotes:", error);
+  }
+}
+
+// Call syncQuotesWithServer when the app initializes
+document.addEventListener("DOMContentLoaded", () => {
+  syncQuotesWithServer(); // Sync quotes when the page loads
+});
+
+// Function to post a new quote to the server
+async function postQuoteToServer(quote) {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(quote),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json(); // This may be your newly created quote or a confirmation
+    console.log("Quote posted successfully:", data);
+  } catch (error) {
+    console.error("Error posting quote:", error);
+  }
+}
+
+// Update addQuote function to post the quote to the server
+function addQuote() {
+  const newQuoteText = document.getElementById("newQuoteText").value;
+  const newQuoteCategory = document.getElementById("newQuoteCategory").value;
+
+  if (newQuoteText && newQuoteCategory) {
+    const newQuote = { text: newQuoteText, category: newQuoteCategory };
+    const quotes = JSON.parse(localStorage.getItem("quotes")) || [];
+    quotes.push(newQuote);
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+
+    // Post the new quote to the server
+    postQuoteToServer(newQuote);
+
+    // Optionally display the new quote
+    displayQuotes(quotes);
+    document.getElementById("newQuoteText").value = ""; // Clear input field
+    document.getElementById("newQuoteCategory").value = ""; // Clear category field
+  } else {
+    alert("Please enter a quote and category.");
+  }
+}
+
+// Function to display quotes on the page
+function displayQuotes(quotes) {
+  const quoteDisplay = document.getElementById("quoteDisplay");
+  quoteDisplay.innerHTML = ""; // Clear existing quotes
+
+  quotes.forEach((quote) => {
+    const quoteElement = document.createElement("div");
+    quoteElement.innerText = `${quote.text} (${quote.category})`;
+    quoteDisplay.appendChild(quoteElement);
+  });
+}
