@@ -1,4 +1,3 @@
-// Manage quotes array and initialize with stored quotes if available
 let quotes = JSON.parse(localStorage.getItem("quotes")) || [
   {
     text: "The only way to do great work is to love what you do.",
