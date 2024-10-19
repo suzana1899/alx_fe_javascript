@@ -20,6 +20,15 @@
       <button onclick="addQuote()">Add Quote</button>
     </div>
 
+    <!-- Export and Import Buttons -->
+    <button onclick="exportToJsonFile()">Export Quotes</button>
+    <input
+      type="file"
+      id="importFile"
+      accept=".json"
+      onchange="importFromJsonFile(event)"
+    />
+
     <script src="script.js"></script>
   </body>
 </html>
