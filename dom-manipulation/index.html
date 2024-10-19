@@ -11,12 +11,12 @@
       <label for="categoryFilter">Filter by Category:</label>
       <select id="categoryFilter" onchange="filterQuotes()">
         <option value="all">All Categories</option>
-        <!-- Dynamically populated categories -->
       </select>
     </div>
     <div id="quoteDisplay"></div>
     <button id="newQuote">Show New Quote</button>
     <button id="exportQuotes">Export Quotes</button>
+    <input type="file" id="fileInput" accept=".txt, .json" />
 
     <script src="script.js"></script>
   </body>
