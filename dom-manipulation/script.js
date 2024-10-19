@@ -27,6 +27,31 @@ function showRandomQuote() {
   sessionStorage.setItem("lastViewedQuote", JSON.stringify(randomQuote));
 }
 
+// Function to create the "Add Quote" form dynamically
+function createAddQuoteForm() {
+  const formContainer = document.createElement("div");
+
+  const quoteInput = document.createElement("input");
+  quoteInput.id = "newQuoteText";
+  quoteInput.type = "text";
+  quoteInput.placeholder = "Enter a new quote";
+
+  const categoryInput = document.createElement("input");
+  categoryInput.id = "newQuoteCategory";
+  categoryInput.type = "text";
+  categoryInput.placeholder = "Enter quote category";
+
+  const addButton = document.createElement("button");
+  addButton.textContent = "Add Quote";
+  addButton.onclick = addQuote;
+
+  formContainer.appendChild(quoteInput);
+  formContainer.appendChild(categoryInput);
+  formContainer.appendChild(addButton);
+
+  document.body.appendChild(formContainer);
+}
+
 // Add a new quote and save to local storage
 function addQuote() {
   const newQuoteText = document.getElementById("newQuoteText").value;
@@ -67,3 +92,6 @@ function importFromJsonFile(event) {
 
 // Event listener to show a random quote
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+
+// Create the "Add Quote" form when the page loads
+createAddQuoteForm();
