@@ -217,3 +217,46 @@ document.addEventListener("DOMContentLoaded", () => {
   displayQuotes(quotes);
   startPeriodicFetching();
 });
+
+// Function to post a new quote to the server
+async function postQuoteToServer(quote) {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(quote),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json(); // This may be your newly created quote or a confirmation
+    console.log("Quote posted successfully:", data);
+  } catch (error) {
+    console.error("Error posting quote:", error);
+  }
+}
+
+// Update addQuote function to post the quote to the server
+function addQuote() {
+  const newQuoteText = document.getElementById("newQuoteText").value;
+  const newQuoteCategory = document.getElementById("newQuoteCategory").value;
+
+  if (newQuoteText && newQuoteCategory) {
+    const newQuote = { text: newQuoteText, category: newQuoteCategory };
+    const quotes = JSON.parse(localStorage.getItem("quotes")) || [];
+    quotes.push(newQuote);
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+
+    // Post the new quote to the server
+    postQuoteToServer(newQuote);
+
+    // Optionally display the new quote
+    displayQuotes(quotes);
+    document.getElementById("newQuoteText").value = ""; // Clear input field
+    document.getElementById("newQuoteCategory").value = ""; // Clear category field
+  } else {
+    alert("Please enter a quote and category.");
+  }
+}
